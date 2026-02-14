@@ -345,39 +345,34 @@ function csvEsc(v){
   return `"${String(v ?? "").replaceAll('"','""')}"`;
 }
 
+// Generate submission id once per page load
 const sid = makeId();
 document.getElementById("sid").textContent = sid;
 document.getElementById("fname").textContent = sid + ".wav";
 
-const email = document.getElementById("email").value.trim();
-const occupation = document.getElementById("occupation").value;
-const university = document.getElementById("university").value.trim();
-const consent = document.getElementById("consent").value;
+// ---- Download metadata ----
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const email = document.getElementById("email").value.trim();
+  const occupation = document.getElementById("occupation").value;
+  const university = document.getElementById("university").value.trim();
+  const consent = document.getElementById("consent").value;
 
   if (!email || !occupation || !university || consent !== "yes") {
     alert("Please complete all required fields and consent.");
     return;
   }
-   const sentenceInputs = document.querySelectorAll(".sentence-input");
-   const sentences = [];
-   sentenceInputs.forEach(input => {
-   sentences.push(csvEsc(input.value.trim()));
+
+  const sentenceInputs = document.querySelectorAll(".sentence-input");
+  const sentences = [];
+  sentenceInputs.forEach(input => {
+    sentences.push(csvEsc(input.value.trim()));
   });
-const headerBase = [
-  "submission_id",
-  "email",
-  "occupation",
-  "university",
-  "consent"
-];
 
-const sentenceHeaders = sentences.map((_, i) => `sentence${i+1}`);
+  const headerBase = ["submission_id","email","occupation","university","consent"];
+  const sentenceHeaders = sentences.map((_, i) => `sentence${i+1}`);
+  const header = [...headerBase, ...sentenceHeaders, "timestamp"].join(",") + "\n";
 
-const header =
-  [...headerBase, ...sentenceHeaders, "timestamp"].join(",") + "\n";
-
-const row =
-  [
+  const row = [
     sid,
     csvEsc(email),
     csvEsc(occupation),
@@ -387,20 +382,20 @@ const row =
     new Date().toISOString()
   ].join(",") + "\n";
 
-
   const blob = new Blob([header + row], {type:"text/csv"});
   const url = URL.createObjectURL(blob);
+
   const a = document.createElement("a");
   a.href = url;
   a.download = sid + ".csv";
+  document.body.appendChild(a);
   a.click();
+  a.remove();
+
   URL.revokeObjectURL(url);
 });
 
-
-
-
-// Dynamic sentence fields
+// ---- Dynamic sentence fields ----
 let sentenceCount = 1;
 
 document.getElementById("addSentenceBtn").addEventListener("click", () => {
@@ -422,8 +417,8 @@ document.getElementById("addSentenceBtn").addEventListener("click", () => {
   wrapper.appendChild(input);
   container.appendChild(wrapper);
 });
-
 </script>
+
 
 </body>
 </html>
