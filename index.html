@@ -191,6 +191,32 @@ input::placeholder {
   margin-bottom: 16px;
 }
 
+.sentence-group {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.remove-btn {
+  position: absolute;
+  right: 8px;
+  top: 32px;
+  background: #ef4444;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+}
+
+
 </style>
 </head>
 
@@ -397,17 +423,47 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
 
 // ---- Dynamic sentence fields ----
 let sentenceCount = 1;
+let sentenceCount = 1;
+
+const container = document.getElementById("sentenceContainer");
+
+function updateLabels() {
+  const groups = container.querySelectorAll(".sentence-group");
+  sentenceCount = groups.length;
+
+  groups.forEach((group, index) => {
+    const label = group.querySelector("label");
+    label.textContent = "Sentence " + (index + 1);
+
+    // Remove button only if index >= 1 (Sentence 2+)
+    let removeBtn = group.querySelector(".remove-btn");
+
+    if (index === 0) {
+      if (removeBtn) removeBtn.remove();
+    } else {
+      if (!removeBtn) {
+        removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "remove-btn";
+        removeBtn.textContent = "×";
+
+        removeBtn.addEventListener("click", () => {
+          group.remove();
+          updateLabels();
+        });
+
+        group.appendChild(removeBtn);
+      }
+    }
+  });
+}
 
 document.getElementById("addSentenceBtn").addEventListener("click", () => {
-  sentenceCount++;
-
-  const container = document.getElementById("sentenceContainer");
-
   const wrapper = document.createElement("div");
   wrapper.className = "sentence-group";
 
   const label = document.createElement("label");
-  label.textContent = "Sentence " + sentenceCount;
+  label.textContent = "Sentence " + (sentenceCount + 1);
 
   const input = document.createElement("input");
   input.type = "text";
@@ -416,7 +472,13 @@ document.getElementById("addSentenceBtn").addEventListener("click", () => {
   wrapper.appendChild(label);
   wrapper.appendChild(input);
   container.appendChild(wrapper);
+
+  updateLabels();
 });
+
+// Initialize once
+updateLabels();
+
 </script>
 
 
