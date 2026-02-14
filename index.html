@@ -174,21 +174,18 @@ input::placeholder {
 .req-sticky .image-credit {
   color: #475569;
 }
-
 @media (min-width: 980px) {
   .req-sticky {
     position: sticky;
     top: 20px;
   }
 
-@media (min-width: 980px) {
   .req-sticky img {
     height: 700px;       /* increase this value */
     object-fit: contain; /* keeps proportions */
   }
 }
 
-}
 
 .form-stack .card {
   margin-bottom: 16px;
@@ -331,6 +328,8 @@ Upload audio to FAUbox
 </div>
 </section>
 
+
+  
 <!-- ===== Script ===== -->
 <script>
 function makeId() {
@@ -350,33 +349,44 @@ const sid = makeId();
 document.getElementById("sid").textContent = sid;
 document.getElementById("fname").textContent = sid + ".wav";
 
-document.getElementById("downloadBtn").addEventListener("click", () => {
-  const email = email.value.trim();
-  const occupation = occupation.value;
-  const university = university.value.trim();
-  const consent = consent.value;
+const email = document.getElementById("email").value.trim();
+const occupation = document.getElementById("occupation").value;
+const university = document.getElementById("university").value.trim();
+const consent = document.getElementById("consent").value;
 
   if (!email || !occupation || !university || consent !== "yes") {
     alert("Please complete all required fields and consent.");
     return;
   }
+   const sentenceInputs = document.querySelectorAll(".sentence-input");
+   const sentences = [];
+   sentenceInputs.forEach(input => {
+   sentences.push(csvEsc(input.value.trim()));
+  });
+const headerBase = [
+  "submission_id",
+  "email",
+  "occupation",
+  "university",
+  "consent"
+];
 
-  const s1 = s1.value.trim();
-  const s2 = s2.value.trim();
-  const s3 = s3.value.trim();
+const sentenceHeaders = sentences.map((_, i) => `sentence${i+1}`);
 
-  const header = "submission_id,email,occupation,university,consent,sentence1,sentence2,sentence3,timestamp\n";
-  const row = [
+const header =
+  [...headerBase, ...sentenceHeaders, "timestamp"].join(",") + "\n";
+
+const row =
+  [
     sid,
     csvEsc(email),
     csvEsc(occupation),
     csvEsc(university),
     "yes",
-    csvEsc(s1),
-    csvEsc(s2),
-    csvEsc(s3),
+    ...sentences,
     new Date().toISOString()
   ].join(",") + "\n";
+
 
   const blob = new Blob([header + row], {type:"text/csv"});
   const url = URL.createObjectURL(blob);
