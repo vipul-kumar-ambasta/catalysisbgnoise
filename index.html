@@ -277,7 +277,7 @@ Please fill in your details, download the metadata file, then upload your audio 
 <label for="university">University / Organization</label>
 <input id="university" type="text" required>
 
-<h3>Example Sentences (optional)</h3>
+<!-- <h3>Example Sentences</h3>
 <label for="s1">Sentence 1</label>
 <input id="s1" type="text">
 
@@ -285,7 +285,22 @@ Please fill in your details, download the metadata file, then upload your audio 
 <input id="s2" type="text">
 
 <label for="s3">Sentence 3</label>
-<input id="s3" type="text">
+<input id="s3" type="text"> -->
+
+<h3>Example Sentences</h3>
+<div id="sentenceContainer">
+
+  <div class="sentence-group">
+    <label>Sentence 1</label>
+    <input type="text" class="sentence-input">
+  </div>
+
+</div>
+
+<button type="button" class="btn" id="addSentenceBtn" style="margin-top:10px;">
+  + Add another sentence
+</button>
+
 
 <label for="consent">Consent</label>
 <select id="consent" required>
@@ -371,6 +386,33 @@ document.getElementById("downloadBtn").addEventListener("click", () => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+
+
+
+// Dynamic sentence fields
+let sentenceCount = 1;
+
+document.getElementById("addSentenceBtn").addEventListener("click", () => {
+  sentenceCount++;
+
+  const container = document.getElementById("sentenceContainer");
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "sentence-group";
+
+  const label = document.createElement("label");
+  label.textContent = "Sentence " + sentenceCount;
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "sentence-input";
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(input);
+  container.appendChild(wrapper);
+});
+
 </script>
 
 </body>
