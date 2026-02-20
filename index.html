@@ -185,10 +185,6 @@ input::placeholder { color: #94a3b8; }
 </section>
 
 <!-- ===== Contribution Section ===== -->
-<h1>Contribute to the Dataset</h1>
-<!-- <p class="small">
-Fill in your details, optionally download your metadata CSV for your records, then upload your audio below.
-</p> -->
 
 <section class="contribute-grid">
 
@@ -222,37 +218,24 @@ Fill in your details, optionally download your metadata CSV for your records, th
       <label for="university">University / Organization</label>
       <input id="university" type="text" required>
 
-      <h3>Example Sentences</h3>
+    </div>
+    <div class='card'>
+      <h2>Step 2 : Example sentences </h2>
       <div id="sentenceContainer">
         <div class="sentence-group">
           <label>Sentence 1</label>
           <input type="text" class="sentence-input">
         </div>
-      </div>
-
-      <button type="button" class="btn" id="addSentenceBtn" style="margin-top:10px;">
-        + Add another sentence
-      </button>
-<!-- 
-      <label for="consent">Consent</label>
-      <select id="consent" required>
-        <option value="">Select…</option>
-        <option value="yes">I consent to using my audio for this project.</option>
-        <option value="no">I do not consent</option>
-      </select> -->
-<!-- 
-      <p class="small">
-        Your submission ID: <code id="sid">—</code><br>
-        (You can upload up to 10 files. We store them under this submission ID.)
-      </p>
-
-      <button class="btn" id="downloadBtn" type="button">
-        Download metadata (.csv)
-      </button> -->
+     </div>
+    
+    <button type="button" class="btn" id="addSentenceBtn" style="margin-top:10px;">
+      + Add another sentence
+    </button>
     </div>
+    
 
     <div class="card">
-      <h2>Step 2 — Upload Audio</h2>
+      <h2>Step 3 — Upload Audio</h2>
 
       <label for="audioFiles">Upload up to 10 files (.wav, .mp3), total ≤ 10 MB</label>
       <input id="audioFiles" type="file" multiple accept=".wav,.mp3" required>
